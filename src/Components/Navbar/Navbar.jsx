@@ -25,9 +25,7 @@ const Navbar = () => {
       <nav className="navbar">
           <div className="nav-left">
               <img src={hamburger} alt="" onClick={showSideMenu} className="toogler-icon-menu"/>
-              <a className="" href="./index.html">
               <img src={Youtube} alt="" />
-                </a>
           </div>
 
           <div className="nav-center">
