@@ -7,29 +7,38 @@ const ContextProvider = (props) => {
 
     const [searchQuery,setSearchQuery] = useState('latest');
     const [dataItems,setDataItems] = useState(null);
+    const [currentVideoId,setCurrentVideoId] = useState(null);
+    const [currentDataItem,setCurrentDataItem] = useState(null);
+
     const BASE_URL = "https://www.googleapis.com/youtube/v3";
-    const API_KEY = "AIzaSyDA0UFC-gFpphL3RRiZy26LV_h4DMI_O1g";
+    const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
 
 
 
     async function fetchVideo() {
-      const maxResults = 5;
+      const maxResults = 15;
       console.log("Fetching video");
       try {
+        console.log(searchQuery)
         const { data } = await axios(`${BASE_URL}/search?key=${API_KEY}&q=${searchQuery}&maxResults=${maxResults}&part=snippet`);
-        data?.items?.map(async (item) => {
-          let VideoStats = getVideoStats(item?.id?.videoId);
-          let contentDetails = getContentDetails(item?.id?.videoId);
-          let ChannelLogo = getChannelLogo(item?.snippet?.channelId);
-          const results = await Promise.all([VideoStats, contentDetails, ChannelLogo]);
-          item.VideoStats = results?.[0];
-          item.contentDetails = results?.[1];
-          item.ChannelLogo = results?.[2];
-          return item;
-        });
-        setDataItems(data?.items);
-        console.log(data.items);
+        const itemsWithDetails = await Promise.all(
+          data?.items?.map(async (item) => {
+            let VideoStats = getVideoStats(item?.id?.videoId);
+            let contentDetails = getContentDetails(item?.id?.videoId);
+            let ChannelLogo = getChannelLogo(item?.snippet?.channelId);
+            const results = await Promise.all([VideoStats, contentDetails, ChannelLogo]);
+            item.VideoStats = results?.[0];
+            item.contentDetails = results?.[1];
+            item.ChannelLogo = results?.[2];
+            return item;
+          })
+        );
+        setDataItems(itemsWithDetails);
+        setCurrentVideoId(itemsWithDetails[0]?.id?.videoId);
+        console.log(itemsWithDetails);
+        localStorage.setItem('data', JSON.stringify(itemsWithDetails));
+        // setDataItems(JSON.parse(localStorage.getItem('data')));
         console.log("Fetching video Successful!");
       } catch (error) {
         console.log("this is the error in fetching the Data in API call-> " + error);
@@ -40,7 +49,7 @@ const ContextProvider = (props) => {
         try {
           const { data } = await axios(`${BASE_URL}/videos?key=${API_KEY}&part=statistics&id=${videoId}`);
           const stats = data.items;
-          console.log("getVideoStats "+stats);
+          // console.log("getVideoStats "+stats);
           return stats;
         } catch (error) {
           console.log("getVideoStats "+error);
@@ -50,7 +59,7 @@ const ContextProvider = (props) => {
       async function getContentDetails(videoId) {
         try {
           const {data} = await axios(`${BASE_URL}/videos?id=${videoId}&part=contentDetails&key=${API_KEY}`);
-          console.log("getContentDetails "+data);
+          // console.log("getContentDetails "+data);
           return data;
         } catch (error) {
           console.log("getContentDetails "+error)
@@ -60,7 +69,7 @@ const ContextProvider = (props) => {
       async function getChannelLogo(channelId) {
         try {
           const {data} = await axios(`${BASE_URL}/channels?key=${API_KEY}&part=snippet&id=${channelId}`);
-          console.log("getChannelLogo "+data);
+          // console.log("getChannelLogo "+data);
           return data;
         } catch (error) {
           console.log("getChannelLogo "+error)
@@ -74,7 +83,7 @@ const ContextProvider = (props) => {
       
 
   return (
-    <Context.Provider value={{setSearchQuery,dataItems,setDataItems}}>
+    <Context.Provider value={{BASE_URL,API_KEY,setSearchQuery,dataItems,setDataItems,currentVideoId,setCurrentVideoId,currentDataItem,setCurrentDataItem}}>
         {props.children}
     </Context.Provider>
   )

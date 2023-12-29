@@ -10,6 +10,12 @@ import Profile from "../../Assets/Profile.png"
 import Context from '../../context/Context' 
 
 const Navbar = () => {
+  function showSideMenu(){
+    console.log("clicked");
+     let sideMenu = document.getElementById("sideMenu");
+     sideMenu.classList.toggle("show");
+    console.log(sideMenu);
+  }
 
   const {setSearchQuery} = useContext(Context)
 
@@ -18,7 +24,7 @@ const Navbar = () => {
   return (
       <nav className="navbar">
           <div className="nav-left">
-              <img src={hamburger} alt="" onclick="hide()" className="toogler-icon-menu"/>
+              <img src={hamburger} alt="" onClick={showSideMenu} className="toogler-icon-menu"/>
               <a className="" href="./index.html">
               <img src={Youtube} alt="" />
                 </a>
@@ -27,9 +33,12 @@ const Navbar = () => {
           <div className="nav-center">
               <form className="nav-form" role="search">
                   <input type="search" placeholder="Search" id="Search" value={query} onChange={(e)=>setQuery(e.target.value)}/>
-                  <button  type="submit" id="searchBtn" onClick={()=>{setSearchQuery(query)}}>
-                      <img src={search} alt="searchBtn"/>
-                  </button>
+                  <button type="submit" id="searchBtn" onClick={(e) => {
+    e.preventDefault();
+    setSearchQuery(query);
+}}>
+    <img src={search} alt="searchBtn"/>
+</button>
                   <img src={listen} alt="listen"/>
                 </form>
           </div>

@@ -83,11 +83,13 @@ input[type="search"] {
 
 main {
   flex: 1;
-  background-color: #343a40;
+  background-color: #000000;
   overflow-y: auto;
   display: flex;
 }
-
+*::-webkit-scrollbar {
+  display: none;
+}
 #sideMenu {
   flex: 0.15;
   display: flex;
@@ -95,7 +97,7 @@ main {
   overflow-y: auto;
   padding: 0px 0.5rem;
   align-items: center;
-  background-color: #343a40;
+  background-color: #101010;
 }
 .container{
   padding: 1rem 0rem;
@@ -179,22 +181,23 @@ background-color: #63666a;
 }
 
 .card2 {
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: #000;
+  border: 1px solid #1b1b1b;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 25%;
+  width: 22%;
   max-width: 23%;
   min-width: 15rem;
   height: fit-content;
   overflow: hidden;
   border-radius: 0.5rem;
+  color: white;
 }
 .card-img-top{
   width: 100%;
 }
 .cardBody{
   position: relative;
-  padding: 1rem 0.3rem;
+  padding: 0.7rem 0.3rem;
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -252,18 +255,11 @@ background-color: #63666a;
       display: block;
       align-self: center;
   }
-  /* main {
-      position: relative;
-  } */
+
   #sideMenu {
       text-align: center;
       height: 100%;
-      /* z-index: 2; */
       width: 10%;
-      /* position: absolute;
-      top: 0;
-      left: 0; */
-      /* display: none; */
   }
   .con-head{
       font-size: 0.7rem;
@@ -286,8 +282,8 @@ background-color: #63666a;
       align-items: center;
   }
   .card2 {
-      width: 40%;
-      max-width:50%;
+      width: 90%;
+      max-width:90%;
       min-width: 12rem;
   }
 
