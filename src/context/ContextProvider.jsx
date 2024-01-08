@@ -19,9 +19,10 @@ const ContextProvider = (props) => {
     async function fetchVideo() {
       const maxResults = 15;
       console.log("Fetching video");
+      console.log(API_KEY);
       try {
         console.log(searchQuery)
-        const { data } = await axios(`${BASE_URL}/search?key=${API_KEY}&q=${searchQuery}&maxResults=${maxResults}&part=snippet`);
+        const { data } = await axios.get(`${BASE_URL}/search?key=${API_KEY}&q=${searchQuery}&maxResults=${maxResults}&part=snippet`);
         const itemsWithDetails = await Promise.all(
           data?.items?.map(async (item) => {
             let VideoStats = getVideoStats(item?.id?.videoId);
@@ -47,7 +48,7 @@ const ContextProvider = (props) => {
 
       async function getVideoStats(videoId) {
         try {
-          const { data } = await axios(`${BASE_URL}/videos?key=${API_KEY}&part=statistics&id=${videoId}`);
+          const { data } = await axios.get(`${BASE_URL}/videos?key=${API_KEY}&part=statistics&id=${videoId}`);
           const stats = data.items;
           // console.log("getVideoStats "+stats);
           return stats;
@@ -58,7 +59,7 @@ const ContextProvider = (props) => {
 
       async function getContentDetails(videoId) {
         try {
-          const {data} = await axios(`${BASE_URL}/videos?id=${videoId}&part=contentDetails&key=${API_KEY}`);
+          const {data} = await axios.get(`${BASE_URL}/videos?id=${videoId}&part=contentDetails&key=${API_KEY}`);
           // console.log("getContentDetails "+data);
           return data;
         } catch (error) {
@@ -68,7 +69,7 @@ const ContextProvider = (props) => {
 
       async function getChannelLogo(channelId) {
         try {
-          const {data} = await axios(`${BASE_URL}/channels?key=${API_KEY}&part=snippet&id=${channelId}`);
+          const {data} = await axios.get(`${BASE_URL}/channels?key=${API_KEY}&part=snippet&id=${channelId}`);
           // console.log("getChannelLogo "+data);
           return data;
         } catch (error) {
